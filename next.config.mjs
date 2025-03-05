@@ -2,7 +2,8 @@ let userConfig = undefined
 try {
   userConfig = await import('./v0-user-next.config')
 } catch (e) {
-  // ignore error
+  // Ignore error if the config file doesn't exist or can't be imported
+  console.log('No user config found, proceeding with default config.')
 }
 
 /** @type {import('next').NextConfig} */
@@ -23,17 +24,23 @@ const nextConfig = {
   },
 }
 
-mergeConfig(nextConfig, userConfig)
-
+/**
+ * Merges the user config into the default nextConfig
+ * @param {object} nextConfig - The default configuration
+ * @param {object} userConfig - The user-specific configuration
+ * @returns {object} The merged configuration
+ */
 function mergeConfig(nextConfig, userConfig) {
   if (!userConfig) {
-    return
+    return nextConfig
   }
 
   for (const key in userConfig) {
     if (
       typeof nextConfig[key] === 'object' &&
-      !Array.isArray(nextConfig[key])
+      !Array.isArray(nextConfig[key]) &&
+      nextConfig[key] !== null &&
+      userConfig[key] !== null
     ) {
       nextConfig[key] = {
         ...nextConfig[key],
@@ -43,6 +50,8 @@ function mergeConfig(nextConfig, userConfig) {
       nextConfig[key] = userConfig[key]
     }
   }
+  return nextConfig
 }
 
-export default nextConfig
+// Merge user config with default config
+export default mergeConfig(nextConfig, userConfig)

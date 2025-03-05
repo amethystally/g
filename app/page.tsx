@@ -167,4 +167,47 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-a
+      <div className="container mx-auto">
+        <Card>
+          <CardHeader>
+            <CardTitle>Check Email or Username</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleEmailSubmit}>
+              <Input 
+                type="email" 
+                placeholder="Enter email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                required 
+              />
+              {emailError && <Alert variant="destructive"><AlertDescription>{emailError}</AlertDescription></Alert>}
+              <Button type="submit" disabled={isEmailLoading}>
+                {isEmailLoading ? <Loader2 className="animate-spin" /> : "Check Email"}
+              </Button>
+              {emailResult && <p>{emailResult}</p>}
+            </form>
+
+            <form onSubmit={handleUsernameSubmit}>
+              <Input 
+                type="text" 
+                placeholder="Enter username" 
+                value={username} 
+                onChange={(e) => setUsername(e.target.value)} 
+                required 
+              />
+              {usernameError && <Alert variant="destructive"><AlertDescription>{usernameError}</AlertDescription></Alert>}
+              <Button type="submit" disabled={isUsernameLoading}>
+                {isUsernameLoading ? <Loader2 className="animate-spin" /> : "Check Username"}
+              </Button>
+              {usernameResult && <p>{usernameResult}</p>}
+            </form>
+          </CardContent>
+          <CardFooter>
+            <p>Need help? Contact support.</p>
+          </CardFooter>
+        </Card>
+      </div>
+    </main>
+  )
+}
